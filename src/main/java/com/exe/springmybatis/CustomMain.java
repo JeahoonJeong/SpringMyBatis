@@ -16,8 +16,8 @@ public class CustomMain {
 		
 		//insert
 		dto = new CustomDTO();
-		dto.setId(222);
-		dto.setName("bbb");
+		dto.setId(333);
+		dto.setName("ccc");
 		dto.setAge(25);
 		
 		dao.insertDate(dto);
@@ -25,9 +25,9 @@ public class CustomMain {
 		
 		System.out.println("insert success!");
 		
-		/*
+		
 		//select
-		List<CustomDTO> lists = dao.getLists();
+		/*List<CustomDTO> lists = dao.getLists();
 		for(CustomDTO dto1 :lists){
 			System.out.printf("%d %s %d\n",dto1.getId(),dto1.getName(),dto1.getAge());
 		}
@@ -36,15 +36,15 @@ public class CustomMain {
 		}*/
 		
 		
-		/*//OneSelect
-		dto = dao.getReadData(777);
+		//OneSelect
+		/*dto = dao.getReadData(777);
 		if(dto!=null) {
 			System.out.printf("%d %s %d\n",dto.getId(),dto.getName(),dto.getAge());
 			System.out.println("select success!");
 		}*/
 		
-		/*//update
-		dto = new CustomDTO();
+		//update
+		/*dto = new CustomDTO();
 		dto.setId(777);
 		dto.setName("¹è¼öÁö");
 		dto.setAge(21);
@@ -55,8 +55,8 @@ public class CustomMain {
 		*/
 		
 		//delete
-		/*
-		dao.deleteData(111);
+		
+		/*dao.deleteData(111);
 		
 		List<CustomDTO> lists = dao.getLists();
 		for(CustomDTO dto1 :lists){

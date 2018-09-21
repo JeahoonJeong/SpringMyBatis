@@ -8,192 +8,51 @@ import java.util.List;
 
 import javax.sql.DataSource;
 
+import org.apache.ibatis.session.SqlSessionFactory;
+import org.mybatis.spring.SqlSessionTemplate;
+
 public class CustomDAO {
 	
-	private DataSource dataSource;
+	private SqlSessionTemplate sessionTemplate;
 	
-	public void setDataSource(DataSource dataSource) {
-		this.dataSource = dataSource;
+	
+	public void setSessionTemplate(SqlSessionTemplate sessionTemplate) {
+		this.sessionTemplate = sessionTemplate;
 	}
-	
+
+
 	Connection conn = null;
 	
-	public int insertDate(CustomDTO dto) {
+	public void insertDate(CustomDTO dto) {
 		
-		int result = 0;
-		PreparedStatement pstmt = null;
-		String sql;
+		sessionTemplate.insert("com.exe.mapper.insert", dto);
 		
-		try {
-			
-			conn = dataSource.getConnection();
-			sql = "insert into custom (id,name,age)";
-			sql +="values(?,?,?)";
-			
-			pstmt = conn.prepareStatement(sql);
-			
-			pstmt.setInt(1, dto.getId());
-			pstmt.setString(2, dto.getName());
-			pstmt.setInt(3, dto.getAge());
-			
-			result = pstmt.executeUpdate();
-			
-			pstmt.close();
-			conn.close();
-		
-			
-		} catch (Exception e) {
-			// TODO: handle exception
-			System.out.println(e.toString());
-		}
-		
-		return result;
 	}
 	
-	public int updateData(CustomDTO dto) {
-		
-		int result = 0;
-		PreparedStatement pstmt = null;
-		String sql;
-		
-		try {
-			
-			conn = dataSource.getConnection();
-			sql = "update custom set name=?, age=? where id=?";
-			
-			pstmt = conn.prepareStatement(sql);
-			
-			pstmt.setInt(3, dto.getId());
-			pstmt.setString(1, dto.getName());
-			pstmt.setInt(2, dto.getAge());
-			
-			result = pstmt.executeUpdate();
-			
-			pstmt.close();
-			conn.close();
-		
-			
-		} catch (Exception e) {
-			// TODO: handle exception
-			System.out.println(e.toString());
-		}
-		
-		return result;
-	}
 	
 	public List<CustomDTO> getLists(){
 		
-		List<CustomDTO> lists = new ArrayList<CustomDTO>();
-		
-		PreparedStatement pstmt = null;
-		String sql = "";
-		ResultSet rs = null;
-		
-		try {
-			
-			conn = dataSource.getConnection();
-			
-			sql = "select id,name,age from custom";
-			
-			pstmt = conn.prepareStatement(sql);
-			
-			rs = pstmt.executeQuery();
-			
-			
-			
-			while(rs.next()) {
-				
-				CustomDTO dto = new CustomDTO();
-				
-				dto.setId(rs.getInt("id"));
-				dto.setName(rs.getString("name"));
-				dto.setAge(rs.getInt("age"));
-				
-				lists.add(dto);
-			}
-		
-			rs.close();
-			conn.close();
-			pstmt.close();
-			
-		} catch (Exception e) {
-			// TODO: handle exception
-			System.out.println(e.toString());
-		}
+		List<CustomDTO> lists = 
+				sessionTemplate.selectList("com.exe.mapper.list");
 		
 		return lists;
+	}
+	
+	public void updateData(CustomDTO dto) {
+		sessionTemplate.update("com.exe.mapper.update", dto);
 	}
 	
 	
 	public CustomDTO getReadData(int id){
 		
-		CustomDTO dto = null;
-		PreparedStatement pstmt = null;
-		String sql = "";
-		ResultSet rs = null;
-		
-		try {
-			
-			conn = dataSource.getConnection();
-			
-			sql = "select id,name,age from custom where id = ?";
-			
-			pstmt = conn.prepareStatement(sql);
-			
-			pstmt.setInt(1, id);
-			
-			rs = pstmt.executeQuery();
-			
-			
-			
-			while(rs.next()) {
-				
-				dto = new CustomDTO();
-				
-				dto.setId(rs.getInt("id"));
-				dto.setName(rs.getString("name"));
-				dto.setAge(rs.getInt("age"));
-			}
-		
-			rs.close();
-			conn.close();
-			pstmt.close();
-			
-		} catch (Exception e) {
-			// TODO: handle exception
-			System.out.println(e.toString());
-		}
+		CustomDTO dto = sessionTemplate.selectOne("com.exe.mapper.list1", id);
 		
 		return dto;
 	}
 	
 	
-	public int deleteData(int id) {
-		
-		int result = 0;
-		PreparedStatement pstmt = null;
-		String sql = "";
-		
-		try {
-			
-			conn = dataSource.getConnection();
-			
-			sql = "delete from custom where id=?";
-			
-			pstmt = conn.prepareStatement(sql);
-			
-			pstmt.setInt(1, id);
-			
-			result = pstmt.executeUpdate();
-			
-			pstmt.close();
-			conn.close();
-			
-		} catch (Exception e) {
-			System.out.println(e.toString());
-		}
-		
-		return result;
+	public void deleteData(int id) {
+		sessionTemplate.delete("com.exe.mapper.delete", id);
 	}
 	
 	
