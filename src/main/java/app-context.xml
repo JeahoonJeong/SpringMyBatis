@@ -13,8 +13,18 @@
 	<context:component-scan base-package="com.exe.springmybatis" />
 	
 	<bean id="customDAO" class="com.exe.springmybatis.CustomDAO">
-		<property name="dataSource" ref="dataSource"></property>
+		<property name="sessionTemplate" ref="sessionTemplate"/>
 	</bean>
+	
+	<bean id="sessionTemplate" class="org.mybatis.spring.SqlSessionTemplate">
+		<constructor-arg ref="sessionFactory"/>
+	</bean>
+	
+	<bean id="sessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource"></property>
+		<property name="configLocation" value="classpath:/com/exe/springmybatis/mybatis_config.xml"/>
+	</bean>
+	
 	
 	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
 		destroy-method="close"
